@@ -1,0 +1,20 @@
+
+import numpy as np
+import pandas as pd
+import docx
+from docx import Document
+import requests
+from io import BytesIO
+
+url = 'https://www.gairuo.com/file/data/dataset/team.xlsx'
+
+response = requests.get(url)
+data = BytesIO(response.content)
+df = pd.read_excel(data)
+print(df)
+doc = Document()
+doc.add_heading('DataReport', level=1)
+doc.add_paragraph('以下是从Excel读取的数据：')
+for index, row in df.iterrows():
+    doc.add_paragraph(f'{index}: {row}')
+doc.save('ExcelReport.docx')
